@@ -26,6 +26,37 @@ Q = ellchangepointinv(P, change);
 
 When the database commentary gives a base parameter, `database_t` stores it and `repository_t(database_t)` gives `t_value`. Curve 273 also provides `second_coefficient_point`, `second_t_value`, `second_repository_t`, and `second_change` for its second specialization. Loading the file checks both.
 
+### Rank 32 on X1152 by changing the fibration
+
+All three records start from the repository equation `surface(T,4,4)`. Specializing the coefficient curve at `(4,4)` fixes the K3 surface. On this surface a new rational function of `(T,x,y)` gives a different elliptic fibration. Its published base parameter is denoted by `t_value` in the curve file. The original `T` varies along the record curve.
+
+| ICARM curve | Fibrations visited after the original | Final base parameter |
+| --- | --- | ---: |
+| [4239](4239.gp) | #4239 | −2868768/362209 |
+| [6534](6534.gp) | #4239 | −248188/1981293 |
+| [6782](6782.gp) | #4239 → #3900 → #6782 | 431951/282772 |
+
+Each arrow, including the one from the original fibration to #4239, is a 2-neighbor step. A general old fiber and a general new fiber meet in two points. In the first step, write the reduced old coordinates as `(z,x,y)` and the chosen section as `Q = (X/k²,Y/k³)`. Define `c0 = −Y/X mod k²`, `c1 = z*c0 mod k²`, `d0 = (Y+c0*X)/k²`, and `d1 = (z*Y+c1*X)/k²`. The pencil parameter is
+
+```text
+s = (z*k*y - c1*x + d1)/(k*y - c0*x + d0).
+```
+
+If `b` denotes the published #4239 parameter, then `s = (4098*b − 5568)/(8795*b − 4750)`. Consequently #4239 is the curve cut out by `s = 6886495488/13475653655` on the original surface in reduced coordinates. The first two functions in the [map implementation](neighbors/1152.gp) give the conversion between reduced and repository coordinates. The [pencil data](neighbors/1152-data.gp) give the exact section polynomials and the parameter changes for all three steps.
+
+From the repository root, start GP with `gp -q -s 64M`. The larger stack accommodates the parent 1152 equation. Paste the following to display the original coordinates of a database point and verify the return map.
+
+```gp
+read("curves/6782.gp");
+P = points()[1];
+Q = from_database(P);                    \\ [original T, original x, original y]
+Q[1]                                     \\ the original T for this point
+to_record_fibration(Q)[1]                \\ 431951/282772
+to_database(Q) == P                      \\ 1
+```
+
+`to_record_fibration` and `from_record_fibration` transport triples `[base,x,y]` in either direction on the surface. They use affine charts where the displayed denominators are nonzero. Loading each file checks the section equations, the quartic's rational origin, the generic Weierstrass coefficient identities at each step, and all 32 database points on the original surface and back. The construction uses the 2-neighbor method of Elkies and Kumar. [Method and derivation](https://msp.org/ant/2014/8-10/ant-v8-n10-p01-p.pdf)
+
 ### Search coverage
 
 The database snapshot contains 78 curves with rank lower bound at least 30. The search considered the fixed 1008 surface and the 1020, 1092, and 1152 families. For a given coefficient point, matching used the rational solutions of `j(T) = j_database`, including the fiber at infinity, and checked the change of Weierstrass coordinates over ℚ.

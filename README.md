@@ -2,7 +2,13 @@
 
 Start GP in `1020/QCT/`, `1092/QCT/`, or `1152/QCT/` and load the matching `1020.gp`, `1092.gp`, or `1152.gp`.
 
-For the fixed surface over Q(T), start GP in `1008/QT/` and run `read("1008.gp")`. Use `surface()` for the coefficients and `sections()` for its 17 sections.
+For a fixed surface over Q(T), start GP in the directory listed below and run its load command. Use `surface()` for the coefficients and `sections()` for the 17 sections.
+
+| Discriminant | Coefficient-curve point | Directory | GP load command |
+| --- | --- | --- | --- |
+| 1008 | — | `1008/QT/` | `read("1008.gp")` |
+| 1152 | `[4, 4]` | `1152/QT/` | `read("1152.17-u4-v4.gp")` |
+| 1152 | `[4, -7]` | `1152/QT/` | `read("1152.17-u4-vm7.gp")` |
 
 | File | Contents |
 | --- | --- |

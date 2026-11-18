@@ -1,6 +1,10 @@
 # High-rank fibers
 
-Each curve file identifies a fiber over ℚ with an ICARM database curve. The following direct specializations use the repository's base coordinate `T`.
+Each curve file identifies a fiber over ℚ with an ICARM database curve. The tables below list direct specializations on 1008, 1020, 1092 and X₈, followed by rank-32 fibers on X1152 obtained by changing the fibration.
+
+## Direct specializations on 1008, 1020 and 1092
+
+Here `T` is the repository's base coordinate.
 
 | ICARM curve | Rank lower bound | Surface | Point on C (u, v) | T |
 | --- | ---: | --- | --- | ---: |
@@ -26,7 +30,61 @@ Q = ellchangepointinv(P, change);
 
 When the database commentary gives a base parameter, `database_t` stores it and `repository_t(database_t)` gives `t_value`. Curve 273 also provides `second_coefficient_point`, `second_t_value`, `second_repository_t`, and `second_change` for its second specialization. Loading the file checks both.
 
-### Rank 32 on X1152 by changing the fibration
+## Direct specializations on X₈
+
+The coefficient curve for X₈ is the rational line with coordinate $u$. Each numbered file below gives the exact rational values `coefficient_point = [u]`, `t_value` ($T$), and the PARI coordinate change `change`. All three load the same [X₈ surface and section](../8/QCT/8.gp).
+
+| ICARM curve | Rank lower bound over ℚ | Database point on the marked section |
+| --- | ---: | --- |
+| [6665](6665.gp) | 13 | `points()[1]` |
+| [7631](7631.gp) | 13 | `points()[1]` |
+| [7632](7632.gp) | 18 | `points()[2]` |
+
+From this directory, run `gp -q 7632.gp` to check the equation, the witness points and the K3 surface certificates. The script constructs `fiber()` with `ellinit(surface(t_value, coefficient_point[1]))` and provides the point maps `to_database(Q)` and `from_database(P)`. At the GP prompt, check the marked point and the database equation with
+
+```gp
+Q = sections(t_value, coefficient_point[1])[1];
+to_database(Q) == points()[2]                           \\ 1
+ellchangecurve(fiber(), change)[1..5] == curve()[1..5]  \\ 1
+```
+
+### Recover the X₈ parameters from one point
+
+Write the database equation as $y^2=x^3+a_2x^2+a_4x+a_6$. For the marked witness $P=(x,y)$, let
+
+$$
+m=\frac{3x^2+2a_2 x+a_4}{2y},\qquad n=3x+a_2-m^2,\qquad k=2m-\frac{2y}{n}.
+$$
+
+Putting $x_{\rm db}=k^2 x_c+x$ and $y_{\rm db}=k^3 y_c+mk^2 x_c+y$ moves the marked point to $(0,0)$ and its tangent to $y_c=0$. The resulting coefficients are $[2m/k,n/k^2,2y/k^3,0,0]$. The compact surface has coefficients $[1+w,-t,-wt,0,0]$ with $t=T/216$, $v=54u$ and $w=vt^2$. Matching coefficients gives the catalogue parameters and scale
+
+$$
+u=y\left(\frac{k}{3n}\right)^3,\qquad T=-\frac{216n}{k^2},\qquad h=\frac{6}{k}.
+$$
+
+The PARI change from the catalogue fiber to the database model is $[h,h^2a_2/3,0,0]$. For #6665 and #7631, $a_2=0$ and scaling alone recovers the database equation. For #7632, $a_2=1$ and the change includes the translation $h^2/3$. Each script checks its saved parameters against this tangent calculation.
+
+### Verify the fiber rank bounds and the K3 discriminants
+
+For the elliptic curve, each prime in `independence_primes` gives a homomorphism from the rational points into a cyclic group of prime order $\ell$. Multiply the reduction of each point by $\#E(\mathbf F_p)/\ell$ and take its discrete logarithm in that subgroup. The resulting matrix has column rank 13 modulo 3 for #6665 and #7631, and rank 18 modulo 5 for #7632. A separate good prime excludes rational $\ell$-torsion, so these ranks certify independence over ℤ.
+
+For the K3 surface, the compact equation has split fibers $I_7$ at zero and $I_{11}$ at infinity, together with six simple nodal fibers. The marked section $P$ is disjoint from the zero section. In compact coordinates $x(2P)=t$ has order one at zero and $x(4P)/t^4=(vt^3+t^2)/t^4$ has order one at infinity. Thus $P$ meets component $\pm3$ of each reducible fiber and has height $4-12/7-24/11=8/77$. The fiber, zero section, components and marked section give 19 rational divisor classes and absolute determinant $7\cdot11\cdot(8/77)=8$. [Height and determinant formulas, §§11.8–11.10](https://arxiv.org/pdf/0907.0298#page=51)
+
+Each script counts points on its K3 surface at two good primes. For each surface the reductions give distinct Néron–Severi squareclasses.
+
+| Record | Prime $p$ | Points over $\mathbf F_p$ | Points over $\mathbf F_{p^2}$ | Reduction NS squareclass |
+|---|---:|---:|---:|---:|
+| 6665, 7631 | 5 | 122 | 1112 | −1 |
+| 6665 | 11 | 306 | 17016 | −2 |
+| 7631 | 17 | 632 | 88728 | −2 |
+| 7632 | 17 | 621 | 88805 | −43 |
+| 7632 | 29 | 1418 | 725336 | −7 |
+
+After removing the 19 known classes, Frobenius has polynomial $(X-\varepsilon p)(X^2-sX+p^2)$. The two counts determine $\varepsilon$ and $s$ here. The test $p\nmid s$ rules out roots of unity in the normalized quadratic factor. Over $\mathbf F_{p^2}$ the geometric Picard rank is 20 and the Artin–Tate formula gives squareclass $s^2-4p^2$. Distinct squareclasses at two good primes exclude rank 20 in characteristic zero. [Two-prime comparison](https://arxiv.org/abs/math/0506416)
+
+An index-two enlargement is the only possible proper enlargement of the rank-19 lattice above. The 19 rational classes span it over ℚ, so Galois fixes the full geometric Néron–Severi group and every section is rational. A prime-order section can meet a nonidentity component of at most one of the two fibers. Its maximum single height correction is $30/11<4$, so the torsion is trivial. An index-two enlargement would therefore halve the marked section. Reduce the marked database point modulo 5 for #6665 and #7631, or modulo 23 for #7632. Multiplying it by half the group exponent gives a nonzero point, whereas the same multiple kills every double. This proves saturation and gives $|\det\mathrm{NS}|=8$ for each of the three specialized K3 surfaces.
+
+## Rank 32 on X1152 by changing the fibration
 
 All three records start from the repository equation `surface(T,4,4)`. Specializing the coefficient curve at `(4,4)` fixes the K3 surface. On this surface a new rational function of `(T,x,y)` gives a different elliptic fibration. Its published base parameter is denoted by `t_value` in the curve file. The original `T` varies along the record curve.
 
@@ -57,7 +115,7 @@ to_database(Q) == P                      \\ 1
 
 `to_record_fibration` and `from_record_fibration` transport triples `[base,x,y]` in either direction on the surface. They use affine charts where the displayed denominators are nonzero. Loading each file checks the section equations, the quartic's rational origin, the generic Weierstrass coefficient identities at each step, and all 32 database points on the original surface and back. The construction uses the 2-neighbor method of Elkies and Kumar. [Method and derivation](https://msp.org/ant/2014/8-10/ant-v8-n10-p01-p.pdf)
 
-### Search coverage
+## Search coverage for rank lower bounds of at least 30
 
 The database snapshot contains 78 curves with rank lower bound at least 30. The search considered the fixed 1008 surface and the 1020, 1092, and 1152 families. For a given coefficient point, matching used the rational solutions of `j(T) = j_database`, including the fiber at infinity, and checked the change of Weierstrass coordinates over ℚ.
 

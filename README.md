@@ -2,18 +2,29 @@
 
 Start GP in `1020/QCT/`, `1092/QCT/`, or `1152/QCT/` and load the matching `1020.gp`, `1092.gp`, or `1152.gp`.
 
-For a fixed surface over Q(T), start GP in the directory listed below and run its load command. Use `surface()` for the coefficients and `sections()` for the 17 sections.
+For a fixed surface over Q(T), start GP in the directory listed below and run its load command. Use `surface()` for the coefficients and `sections()` for the saved sections.
 
-| Discriminant | Coefficient-curve point | Directory | GP load command |
-| --- | --- | --- | --- |
-| 1008 | — | `1008/QT/` | `read("1008.gp")` |
-| 1152 | `[4, 4]` | `1152/QT/` | `read("1152.17-u4-v4.gp")` |
-| 1152 | `[4, -7]` | `1152/QT/` | `read("1152.17-u4-vm7.gp")` |
+| Discriminant | Coefficient-curve point | Directory | GP load command | Saved sections |
+| --- | --- | --- | --- | ---: |
+| 27 | — | `27/QT/` | `read("27.gp")` | 1 |
+| 27 | — | `27/QT/` | `read("27.1-section-cm03-27-base-change-1.gp")` | 1 |
+| 27 | — | `27/QT/` | `read("27.1-section-schuett-torsion-3.gp")` | 2 |
+| 440 | — | `440/QT/` | `read("440.gp")` | 10 |
+| 552 | — | `552/QT/` | `read("552.gp")` | 10 |
+| 588 | — | `588/QT/` | `read("588.gp")` | 10 |
+| 808 | — | `808/QT/` | `read("808.gp")` | 10 |
+| 808 | — | `808/QT/` | `read("808.9-sections-model-01.gp")` | 52 |
+| 808 | — | `808/QT/` | `read("808.9-sections-model-02.gp")` | 54 |
+| 1008 | — | `1008/QT/` | `read("1008.gp")` | 17 |
+| 1152 | `[4, 4]` | `1152/QT/` | `read("1152.17-u4-v4.gp")` | 17 |
+| 1152 | `[4, -7]` | `1152/QT/` | `read("1152.17-u4-vm7.gp")` | 17 |
+
+The models for discriminants 27, 440, 552, 588, and 808 use the names and coordinates from the `weierstrass-surfaces` catalogue.
 
 | File | Contents |
 | --- | --- |
 | `*.surface.gp` | `surface(...)` returns `[a1,a2,a3,a4,a6]` for `y² + a1·x·y + a3·y = x³ + a2·x² + a4·x + a6`. |
-| `*.sections.gp` | `sections(...)` returns the saved affine points `[x,y]` in the same coordinates. |
+| `*.sections.gp` | `sections(...)` returns the saved affine points `[x,y]` in the same coordinates. Where provided, `independent_section_count` records the number of independent sections. |
 | `*.curve.gp` | `parameter_points` lists saved rational points on the coefficient curve defined by `parameter_relation(u,v) = 0`. |
 
 ## Specialize a family over Q(C)(T)
@@ -38,9 +49,7 @@ G = matrix(#S, #S, i, j, (h(S[i]) + h(S[j]) - h(ellsub(E, S[i], S[j]))) / 2);
 \\ [17, 1152]
 ```
 
-## Specialize a family over Q(T)
-
-For discriminant 1008 and other, there is no available coefficient curve.
+## Check the section lattice for discriminant 1008
 
 ```gp
 read("1008.gp");

@@ -1,6 +1,6 @@
 # High-rank fibers
 
-Each curve file identifies a fiber over ℚ with an ICARM database curve. The tables below list direct specializations on 1008, 1020, 1092 and X₈, followed by rank-32 fibers on X1152 obtained by changing the fibration.
+Each numbered GP script reproduces an ICARM database curve from a K3 surface in this repository.
 
 ## Direct specializations on 1008, 1020 and 1092
 
@@ -29,6 +29,30 @@ Q = ellchangepointinv(P, change);
 ```
 
 When the database commentary gives a base parameter, `database_t` stores it and `repository_t(database_t)` gives `t_value`. Curve 273 also provides `second_coefficient_point`, `second_t_value`, `second_repository_t`, and `second_change` for its second specialization. Loading the file checks both.
+
+## Curves on X27, X440, X552, X588 and X808
+
+| ICARM curve | Exact rank over ℚ | Parent model | T | Construction |
+| --- | ---: | --- | ---: | --- |
+| [7640](7640.gp) | 6 | [27](../27/QT/27.surface.gp) | 2401/25 | Direct specialization |
+| [7704](7704.gp) | 18 | [440](../440/QT/440.surface.gp) | 7043/517 | Direct specialization |
+| [7705](7705.gp) | 18 | [440](../440/QT/440.surface.gp) | 7043/517 | 2-isogeny quotient |
+| [7702](7702.gp) | 17 | [440](../440/QT/440.surface.gp) | 7115/2756 | Direct specialization |
+| [7681](7681.gp) | 13 | [552](../552/QT/552.surface.gp) | −14/15 | Direct specialization |
+| [7683](7683.gp) | 13 | [552](../552/QT/552.surface.gp) | 44/273 | Direct specialization |
+| [7682](7682.gp) | 13 | [552](../552/QT/552.surface.gp) | −14/15 | 2-isogeny quotient |
+| [7693](7693.gp) | 16 | [588](../588/QT/588.surface.gp) | −2/505 | Direct specialization |
+| [7699](7699.gp) | 16 | [588](../588/QT/588.surface.gp) | −2/505 | 2-isogeny quotient |
+| [7685](7685.gp) | 15 | [588](../588/QT/588.surface.gp) | 179/4 | Direct specialization |
+| [7697](7697.gp) | 17 | [808.9-sections-model-01](../808/QT/808.9-sections-model-01.surface.gp) | −254/887 | Direct specialization |
+| [7696](7696.gp) | 17 | [808.9-sections-model-01](../808/QT/808.9-sections-model-01.surface.gp) | −254/887 | 2-isogeny quotient |
+| [7700](7700.gp) | 16 | [808.9-sections-model-02](../808/QT/808.9-sections-model-02.surface.gp) | −298/515 | Direct specialization |
+
+From the repository root, run `gp -q curves/7640.gp` or substitute any of the other filenames above. From this directory, pass the filename alone. Each script runs offline and includes the exact database coefficients and rational witnesses submitted by Andrii Prokhorenkov. [ICARM data format](https://elliptic-rank.icarm.cloud/api)
+
+In each script, `fiber()` gives the specialized parent equation, `curve()` gives the database model, and `points()` gives the rational witnesses. For a direct specialization, `to_database(Q)` and `from_database(P)` are the two directions of the coordinate change. Each quotient uses the parent fiber's point of order 2 at `(0, 0)`. Its `quotient()` gives the codomain before the final coordinate change, and `to_database(Q)` applies the isogeny and then that change.
+
+The scripts check equality of the five database coefficients and verify every witness on its database model. They use a prime modulus $\ell$, either 5 or 7, and good primes $p$ with exactly one factor of $\ell$ in $\#E(\mathbf F_p)$. Each row consists of discrete logs of the witnesses after reduction and multiplication by $\#E(\mathbf F_p)/\ell$. The rows have full column rank over $\mathbf F_\ell$. A separate good prime with group order prime to $\ell$ excludes rational $\ell$-torsion. PARI/GP's 2-descent confirms the matching rank upper bound.
 
 ## Direct specializations on X₈
 
